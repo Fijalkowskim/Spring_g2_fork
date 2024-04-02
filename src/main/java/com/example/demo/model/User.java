@@ -48,4 +48,7 @@ public class User {
     }, inverseJoinColumns = { @JoinColumn(name = "phoneID") })
     private List<PhoneNumber> phoneNumber;
 
+    @Column(name = "reset_password_token")
+    private String resetPasswordToken;
+
 }

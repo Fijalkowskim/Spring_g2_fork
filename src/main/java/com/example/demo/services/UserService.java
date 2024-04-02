@@ -3,9 +3,11 @@ package com.example.demo.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exceptions.UserCanNotBeNullException;
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepository;
@@ -52,4 +54,31 @@ public class UserService {
             throw new UserCanNotBeNullException();
         }
     }
+
+    public void updateResetPassword(String token, String emial) throws UserNotFoundException{
+        var optionalUser= userRepository.findByEmail(emial);
+        if(optionalUser.isPresent()){
+            var user= optionalUser.get();
+            user.setResetPasswordToken(token);
+            userRepository.save(user);
+        }else{
+            throw new UserNotFoundException();
+        }
+
+    }
+    public User getResetPasswordToken(String token){
+        return userRepository.findByResetPasswordToken(token);
+    }
+    public void updateUserPassword(User user, String newPassword){
+        BCryptPasswordEncoder passwordEncoder= new BCryptPasswordEncoder();
+        var edcodedNewPassword=passwordEncoder.encode(newPassword);
+        
+        user.setPassword(edcodedNewPassword);
+        user.setResetPasswordToken(null);
+
+        userRepository.save(user);
+
+
+    }
+
 }
