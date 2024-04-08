@@ -28,7 +28,8 @@ public class SecurityConfig {
     private static final String[] PUBLIC_URI={"/user/role/{userId}","/","/product","/product/{pageNumber}","/categories","/categories/{pageNumber}",
     "/contact","/productDetail/{id}","/categoryDetails/{id}","/user/add","/user/save",
 "/forgotPassword",
-"/forgotPassword/{token}"
+"/forgotPassword/{token}",
+"/reset-password"
 };
 
     // @Bean

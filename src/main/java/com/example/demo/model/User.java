@@ -1,6 +1,9 @@
 package com.example.demo.model;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.cglib.core.Local;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,4 +54,6 @@ public class User {
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
 
+    @Column(name = "reset_password_token_expiration")
+    private LocalDateTime resetPasswordExpiration;
 }

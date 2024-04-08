@@ -1,5 +1,6 @@
 package com.example.demo.cotroller;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.data.repository.query.Param;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class ForgotPasswordConroller {
     final private UserService userService;
     final private JavaMailSender javaMailSender;
+    final private static int TOKEN_EXPIRATION_MINUTES=30;
 
     @GetMapping("/forgotPassword")
     public String forgotPasswordForm( Model model){
@@ -37,9 +40,11 @@ public class ForgotPasswordConroller {
     UUID randomUuid= UUID.randomUUID();
     var token = randomUuid.toString().replaceAll("-", "");
 
+    // czas wygaśnienia :
+    LocalDateTime expirationDateTime= LocalDateTime.now().plusMinutes(TOKEN_EXPIRATION_MINUTES);
 
     try {
-        userService.updateResetPassword(token, email);
+        userService.updateResetPassword(token, email,expirationDateTime);
         var resetLinkPassword= ServletUriComponentsBuilder.fromRequestUri(request).build();
         var resetLink= resetLinkPassword +"/resetPassword?token="+token;
         try {
@@ -87,7 +92,7 @@ public class ForgotPasswordConroller {
  public String showResetPasswordForm( @Param( value="token") String token, Model model)
 {
     var user= userService.getResetPasswordToken(token);
-    if(user==null){
+    if(user==null || !userService.isResetTokenValid(user)){
         model.addAttribute("error", "Token has been expired");
         model.addAttribute("errorAction", "/forgotPassword");
         model.addAttribute("return", "Return to forget password page");
@@ -98,7 +103,18 @@ public class ForgotPasswordConroller {
     }
 }    
 @PostMapping("/reset-password")
-public String changePassword(){
+public String changePassword(@RequestParam("token") String token, @RequestParam("password") String password, RedirectAttributes redirectAttributes)
+{
+    var user= userService.getResetPasswordToken(token);
+    if(user== null){
+        redirectAttributes.addFlashAttribute("error", "Invalid Token");
+        redirectAttributes.addFlashAttribute("errorAction","/forgotPassowrd");
+        redirectAttributes.addFlashAttribute("return","Return to forgot page to procede with password reset");
+        return "/error-page";
+    }else{
+        userService.updateUserPassword(user, password);
+        redirectAttributes.addFlashAttribute("message", "Password Updated");
+    }
     return"redirect:/";
 }
 }

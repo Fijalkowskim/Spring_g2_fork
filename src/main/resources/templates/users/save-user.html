@@ -126,6 +126,17 @@
               <button type="submit" class="btn btn-primary">Submit</button>
             </div>
     </form>
+ 
+  </div>
+  <div th:if="${user!=null}" class="d-flex justify-content-center">
+    <div class="row g-3">
+      <div class="col">
+    <p>Change current password </p>
+      </div>
+      <div class="col">
+    <a th:href="${'/changePassword/'+user.getId()}"   class="btn btn-outline-primary">Change password</a>
+      </div>
+    </div>
   </div>
   <script >
     function checkPasswordMatcher(){
