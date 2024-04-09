@@ -42,7 +42,13 @@ public class Product {
     @NotNull(message = "price is required")
     private BigDecimal price;
 
+    // max value:
+    @NotNull(message = "Max value must be declared")
+    @Column(name = "current_max_value")
+    private int maxValue;
+
     @ManyToOne
     @JoinColumn(name = "categoryID")
     private Category category;
+
 }

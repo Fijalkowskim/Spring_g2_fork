@@ -23,10 +23,13 @@
       
       <h2>List of products</h2>
       <ul class="list-group">
+        <span th:text="${message}"></span>
         <li
           class="list-group-item d-flex justify-content-between align-items-center"
+          
           th:each="product: ${productList}"
-        >
+        >  
+
           <span th:text="${product.getName()}"></span>
           <span>
             <a
@@ -44,6 +47,12 @@
               th:href="'/removeProduct/'+${product.getId()}"
               >remove</a
             >
+            <form th:action="@{'/addToShoppingCart/'+ ${product.getId()}}" method="post" >
+              <label for="productQuantity">Quantity</label>
+              <input type="number" id="productQuantity" name="quantity" required>
+              <input type="hidden" name="id" th:value="${product.getId()}">
+              <button type="submit">Add to Cart</button>
+            </form>
           </span>
         </li>
       </ul>
