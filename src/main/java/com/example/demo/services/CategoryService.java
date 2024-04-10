@@ -19,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 public class CategoryService {
 
     final CategoryRepository categoryRepository;
+    public List<Category> getAllCategories(){
+        return categoryRepository.findAll();
+    }
 
     public Page<Category> showAllCategories(String keyword,int pageNumber) {
          Pageable page= PageRequest.of(pageNumber-1,10);

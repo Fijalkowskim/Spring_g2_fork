@@ -8,7 +8,7 @@
     rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
-  />
+  /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Shopping Cart</title>
     <style>
         .product-img{
@@ -19,34 +19,83 @@
 </head>
 <body>
     <div th:replace="~{fragments/main-menu}"></div>
-    <div th:if="${items !=null}">
-        <span th:text="${message}"></span>
-        <h2>Your shopping Cart</h2>
-        <div th:each="item : ${items}">
-            <div th:with="product = ${item.product}">
-                <form th:action="@{'/cart/delete/'+ ${item.getId()}}" method="post" onsubmit="return confirm('Are you sure you want to delete this item ?')">
-                    <button type="submit">delete</button>
+    <section class="p-3 p-md-4 -p-xl-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5">
+                    <div class="card border-0 p-3 p-md-4 p-xl-5">
+                        <div th:if="${items !=null}">
+                            <span th:text="${message}" class="text-info"></span>
+                            <h2>Your shopping Cart</h2>
+                            <div th:each="item : ${items}">
+                                <div th:with="product = ${item.product}">
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-auto">
+                                            <form th:action="@{'/cart/delete/'+ ${item.getId()}}" method="post" onsubmit="return confirm('Are you sure you want to delete this item ?')">
+                                            <button type="submit" class="btn btn-primary"><span class="material-symbols-outlined">
+                                                delete
+                                                </span></button>
+                                        </form>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a th:text="${product.getName()}" th:href="'/productDetail/'+${product.getId()}"></a>
+                                            <img th:src="${product.getImgUri()}" class="product-img">
+                                        </div>
+                                        <div class="col-auto">
+                                            <form th:action="@{'/cart/removeQuatity/' +${product.getId()}}" method="post">
+                                                <input type="hidden" name="id" th:value="${product.getId()}">
+                                                <input type="hidden" name="quantity" th:value="1">
+                                                <button type="submit" class="btn btn-danger"> <span class="material-symbols-outlined">
+                                                    remove
+                                                    </span> </button>
+                                            </form>
+                                               
+                                    <span th:text="${item.quantity}"></span>
+                                    <form th:action="@{'/cart/addQuantity/'+ ${product.getId()}}" method="post">
+                                        <input type="hidden" name="id" th:value="${product.getId()}">
+                                        <input type="hidden" name="quantity" th:value="1">
+                                        <button type="submit" class="btn btn-info"><span class="material-symbols-outlined">
+                                            add
+                                            </span></button>
+                                    </form>
+                                    <span>Total item price</span>
+                                    <span th:text="${item.getSubtotal()}"></span>
+                                </div>
+                          
+                            </div>
 
-                </form>
-                <a th:text="${product.getName()}" th:href="'/productDetail/'+${product.getId()}"></a>
-                <img th:src="${product.getImgUri()}" class="product-img">
-                <form th:action="@{'/cart/removeQuatity/' +${product.getId()}}" method="post">
-                    <input type="hidden" name="id" th:value="${product.getId()}">
-                    <input type="hidden" name="quantity" th:value="1">
-                    <button type="submit"> remove </button>
-                </form>
-                <span th:text="${item.quantity}"></span>
-                <form th:action="@{'/cart/addQuantity/'+ ${product.getId()}}" method="post">
-                    <input type="hidden" name="id" th:value="${product.getId()}">
-                    <input type="hidden" name="quantity" th:value="1">
-                    <button type="submit"> add </button>
-                </form>
+                        </div>
+                                    
+                                
+                   
+                    </div>       
+                    
+                </div>
+            </div>
+   
+            
+    </section>
+  
+    <div th:if="${items == null}" >
+    <section class="p-3 p-md-4 -p-xl-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-9 col-lg-7 col-xl-6 col-xxl-5">
+                    <div class="card border-0 p-3 p-md-4 p-xl-5">
+                        <h2>Your cart is empty</h2>
+                    </div>
+                </div>
             </div>
         </div>
-    
+    </section>
+
     </div>
-    <div th:if="${items == null}">
-        <h2>Your cart is empty</h2>
+    <div class="row justify-content-center" >
+        <div class="col-auto">
+            <span>Total Price [$]: 
+            </span>
+            <h3 th:text="${totalPrice}"></h3>
+        </div>
     </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -99,5 +100,26 @@ public class CartItemService {
 public void deleteCartItem(Long id){
     // cartItemRepositiry.deleteById(id);
     cartItemRepositiry.delete(cartItemRepositiry.findById(id).get());
+}
+
+public BigDecimal getSubtotal(CartItem cartItem){
+    if(cartItem !=null && cartItem.getProduct()!=null && cartItem.getProduct().getPrice()!=null){
+        BigDecimal price = cartItem.getProduct().getPrice();
+        BigDecimal subtotal = price.multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+        return subtotal;
+    }else{
+        return BigDecimal.ZERO;
+    }
+}
+
+public BigDecimal calculateTotalPrice(List<CartItem> cartItems){
+    var total = BigDecimal.ZERO;
+    if(cartItems!=null){
+        for(CartItem cartItem : cartItems){
+            total= total.add(cartItem.getSubtotal());
+        }
+    }
+   
+    return total;
 }
 }

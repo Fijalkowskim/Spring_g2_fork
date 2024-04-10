@@ -29,7 +29,8 @@ public class SecurityConfig {
     "/contact","/productDetail/{id}","/categoryDetails/{id}","/user/add","/user/save",
 "/forgotPassword",
 "/forgotPassword/{token}",
-"/reset-password"
+"/reset-password",
+"/api/**"
 };
 
     // @Bean
@@ -73,6 +74,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         return http
+        .csrf(httpSecurityCsrfConfigurer->httpSecurityCsrfConfigurer.ignoringRequestMatchers("/api/**","/login") )
         .formLogin(login-> login.loginPage("/login").defaultSuccessUrl("/").permitAll())
         .logout(logout-> logout.logoutUrl("/logout")
                 .logoutSuccessUrl("/")

@@ -26,7 +26,9 @@ public class ShoppingCartController {
 
     @GetMapping("/shoppingCart")
     public String showShoppingCart(Model model, Authentication authentication){
-    model.addAttribute("items", cartItemService.listCartItems(userService.findUserByEmail(authentication.getName()).get()));
+        var user = userService.findUserByEmail(authentication.getName()).get();
+    model.addAttribute("items", cartItemService.listCartItems(user));
+    model.addAttribute("totalPrice", cartItemService.calculateTotalPrice(cartItemService.listCartItems(user)));
         return"/cart/shopping-cart";
     }
     

@@ -23,6 +23,10 @@ public class ProductService {
     final ProductRepository productRepository;
     final CategoryRepository categoryRepository;
 
+    public List<Product> getAllProducts(){
+        return productRepository.findAll();
+    }
+
     public Page<Product> findAllProducts(String keyword,int pageNumber) {
         Pageable page= PageRequest.of(pageNumber-1,5);
         if (keyword != null) {

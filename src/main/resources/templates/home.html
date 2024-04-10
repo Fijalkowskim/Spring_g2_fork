@@ -27,5 +27,43 @@
         <a class="btn btn-outline-primary" href="/contact">Contact Us</a>
       </div>
     </div>
+    <!-- <div id="cookieButtonDiv">
+      <button id="cookieButton" class="btn btn-primary" type="button" onclick="setCookie()">We use cookie. Clik here to accept it.</button>
+    </div>
+    <script>
+      function checkCookie(){
+        return document.cookie.indexOf("new_cookie")!==-1;
+      }
+
+      function hideButton(){
+        document.getElementById("cookieButtonDiv").style.display='none';
+      }
+
+      function setCookie(){
+        fetch('/set-cookies')
+        .then(respone=> {
+          if(respone.ok){
+            console.log("Cookies set corectly");
+            hideButton();
+          }
+          else{
+            console.log("Failed to set Cookie");
+          }
+        })
+        .catch(error=> console.error("Error"));
+      }
+
+      window.onload= function(){
+        if(checkCookie()){
+          hideButton();
+        }
+      }
+    </script> -->
+    <script type="text/javascript"  src="//www.cookieconsent.com/releases/3.1.0/cookie-consent.js" data-cfasync="false"></script>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function () {
+          cookieconsent.run({"notice_banner_type":"interstitial","consent_type":"express","palette":"dark","language":"en","page_load_consent_levels":["strictly-necessary"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":false,"website_name":"Your Website Name","website_name_div_id":"cc_div","website_privacy_policy_url":"privacy-policy-url","theme":"classic","cookies_policy_url":"cookies-policy-url","notice_banner_enable":true,"cookies_policy_link":"cookies-policy-link","reject_button_click_rejects":false,"reject_button_hide":false,"content_placement":"header","notice_banner_hide":false,"change_preferences_selector":"#cookieconsent_css_toggle_button","cookie_declaration_link":true});
+      });
+  </script>
   </body>
 </html>

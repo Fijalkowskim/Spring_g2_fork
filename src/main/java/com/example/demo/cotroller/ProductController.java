@@ -102,7 +102,8 @@ class ProductController {
     }
 
     // edycja productktu
-    @Secured({"ROLE_MANAGER","ROLE_ADMIN"})    @GetMapping("/editProduct/{productId}")
+    @Secured({"ROLE_MANAGER","ROLE_ADMIN"})    
+    @GetMapping("/editProduct/{productId}")
     public String editProduct(@PathVariable Long productId, Model model) {
         model.addAttribute("title", "Edit current product");
         model.addAttribute("categories", productService.findAllCategories());
