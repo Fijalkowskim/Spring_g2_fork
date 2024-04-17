@@ -34,6 +34,7 @@ class UserController {
     final UserService userService;
     final AuthPasswordConfig authPasswordConfig;
 
+    @Secured({"ROLE_ADMIN"})
     @GetMapping("/users")
     public String showAllUsers(Model model) {
         model.addAttribute("users", userService.findAllUsers());

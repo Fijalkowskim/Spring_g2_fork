@@ -12,7 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 // @ComponentScan("Ccom.example.democ.modules")
 public class AuthPasswordConfig {
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public static PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 }
