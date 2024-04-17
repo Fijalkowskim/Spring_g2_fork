@@ -85,7 +85,7 @@ public class UserService {
         
         user.setPassword(edcodedNewPassword);
         user.setResetPasswordToken(null);
-
+        user.setResetPasswordExpiration(null);
         userRepository.save(user);
 
     }
