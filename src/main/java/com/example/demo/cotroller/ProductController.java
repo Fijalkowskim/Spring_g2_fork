@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.exceptions.ProductArleadyExistsException;
+import com.example.demo.exceptions.ProductIdMustBeGreaterThanZeroExeption;
 import com.example.demo.model.Product;
 import com.example.demo.services.ProductService;
 
@@ -55,7 +56,7 @@ class ProductController {
     }
 @Secured({"ROLE_MANAGER","ROLE_ADMIN"})
     @GetMapping("/removeProduct/{productId}")
-    public String removeProduct(@PathVariable Long productId) {
+    public String removeProduct(@PathVariable Long productId) throws ProductIdMustBeGreaterThanZeroExeption {
         productService.removeProduct(productId);
         return "redirect:/product";
     }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.exceptions.ProductArleadyExistsException;
 import com.example.demo.exceptions.ProductCanNotBeNullException;
+import com.example.demo.exceptions.ProductIdMustBeGreaterThanZeroExeption;
 import com.example.demo.model.Product;
 import com.example.demo.model.dto.ErrorDto;
 import com.example.demo.model.dto.IdDto;
@@ -71,7 +72,7 @@ public class ProductRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeCurrentProduct(@PathVariable Long id){
+    public ResponseEntity<Void> removeCurrentProduct(@PathVariable Long id) throws ProductIdMustBeGreaterThanZeroExeption{
         productService.removeProduct(id);
         return ResponseEntity.accepted().build();
     }

@@ -3,13 +3,13 @@ package com.example.demo.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.tomcat.websocket.PerMessageDeflate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exceptions.ProductArleadyExistsException;
+import com.example.demo.exceptions.ProductIdMustBeGreaterThanZeroExeption;
 import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.repositories.CategoryRepository;
@@ -37,8 +37,13 @@ public class ProductService {
 
     }
 
-    public void removeProduct(Long id) {
-        productRepository.deleteById(id);
+    public void removeProduct(Long id) throws ProductIdMustBeGreaterThanZeroExeption {
+        if(id>0){
+            productRepository.deleteById(id);
+        }else{
+            throw new ProductIdMustBeGreaterThanZeroExeption();
+        }
+      
     }
 
     public Optional<Product> findProductById(Long id) {
