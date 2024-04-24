@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.exceptions.CartItemCanNotBeNull;
 import com.example.demo.exceptions.MaxValueException;
 import com.example.demo.exceptions.ProductCanNotBeNullException;
+import com.example.demo.exceptions.ProductNotFoundExeption;
 import com.example.demo.exceptions.QuantityMinException;
 import com.example.demo.services.CartItemService;
 import com.example.demo.services.UserService;
@@ -75,7 +76,7 @@ public class ShoppingCartRestController {
         }
     }
     @PostMapping("/addQuantity/{productId}")
-    public ResponseEntity<?> addQuantityForProduct(@PathVariable Long productId, Authentication authentication){
+    public ResponseEntity<?> addQuantityForProduct(@PathVariable Long productId, Authentication authentication) throws ProductNotFoundExeption{
         try{
             cartItemService.increaseQuantity(productId, 1, userService.findUserByEmail(authentication.getName()).orElse(null));
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("Product with id :"+ productId +" has been increase correctly");

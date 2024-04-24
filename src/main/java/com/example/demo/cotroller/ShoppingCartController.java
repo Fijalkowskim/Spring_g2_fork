@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.exceptions.CartItemCanNotBeNull;
 import com.example.demo.exceptions.MaxValueException;
 import com.example.demo.exceptions.ProductCanNotBeNullException;
+import com.example.demo.exceptions.ProductNotFoundExeption;
 import com.example.demo.exceptions.QuantityMinException;
 import com.example.demo.services.CartItemService;
 import com.example.demo.services.UserService;
@@ -54,7 +55,7 @@ public class ShoppingCartController {
         return"redirect:/shoppingCart";
     }
     @PostMapping("/cart/addQuantity/{id}")
-    public String addQuantity(@PathVariable Long id, Authentication authentication,RedirectAttributes redirectAttributes){
+    public String addQuantity(@PathVariable Long id, Authentication authentication,RedirectAttributes redirectAttributes) throws ProductNotFoundExeption{
         try {
             cartItemService.increaseQuantity(id, 1, userService.findUserByEmail(authentication.getName()).get());
         } catch (MaxValueException | ProductCanNotBeNullException e) {

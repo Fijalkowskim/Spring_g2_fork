@@ -2,12 +2,14 @@ package com.example.demo.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.demo.exceptions.CartItemCanNotBeNull;
 import com.example.demo.exceptions.MaxValueException;
 import com.example.demo.exceptions.ProductCanNotBeNullException;
+import com.example.demo.exceptions.ProductNotFoundExeption;
 import com.example.demo.exceptions.QuantityMinException;
 import com.example.demo.model.CartItem;
 import com.example.demo.model.User;
@@ -55,10 +57,11 @@ public class CartItemService {
     }
     public Integer decreaseQuantity(Long productId, Integer quantity, User user) throws ProductCanNotBeNullException, CartItemCanNotBeNull{
         var product= productRepository.findById(productId).orElse(null);
+        var carItem = cartItemRepositiry.findByUserAndProduct(user, product);
         if(product==null){
             throw new ProductCanNotBeNullException();
         }
-         var carItem = cartItemRepositiry.findByUserAndProduct(user, product);
+        else{
          if (carItem!=null) {
             var  currentQunatity = carItem.getQuantity();
             var newQuantity= currentQunatity - quantity;
@@ -70,30 +73,36 @@ public class CartItemService {
                 cartItemRepositiry.save(carItem);
                 return newQuantity;
             }
-            
+         
          }else{
             throw new CartItemCanNotBeNull();
          }
+        }
+    
 
     }
-    public Integer increaseQuantity(Long productId, Integer quantity, User user) throws  MaxValueException, ProductCanNotBeNullException
+    public Integer increaseQuantity(Long productId, Integer quantity, User user) throws  MaxValueException, ProductCanNotBeNullException, ProductNotFoundExeption
 {
-    var product=productRepository.findById(productId).get();
-    var cartItem= cartItemRepositiry.findByUserAndProduct(user, product);
+    var optionalProduct=productRepository.findById(productId);
+    if(optionalProduct.isPresent()){
+        var product = optionalProduct.get();
+        var cartItem= cartItemRepositiry.findByUserAndProduct(user, product);
         if(cartItem!=null){
             var currentQuantity=cartItem.getQuantity();
             var newQuantity= currentQuantity+ quantity;
-            if(newQuantity<=product.getMaxValue()){
+            if(newQuantity <= product.getMaxValue()){
                 cartItem.setQuantity(newQuantity);
                 cartItemRepositiry.save(cartItem);
                 return newQuantity;
             }else{
                 throw new MaxValueException();
-            }
-            
-    }
-    else{
-        throw new ProductCanNotBeNullException();
+            }    
+        }
+        else{
+            throw new ProductCanNotBeNullException();
+        }
+    }else{
+        throw new ProductNotFoundExeption();
     }
 }    
 
