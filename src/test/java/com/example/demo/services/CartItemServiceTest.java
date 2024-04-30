@@ -227,7 +227,7 @@ public class CartItemServiceTest {
         assertEquals(BigDecimal.ZERO, subtotalForNullProductPrice);
     }
     @Test
-    void calculateTotalPriceWhenCartItemIsNullTest(){
+    void calculateTotalPriceWhenCartItemIsNotNullTest(){
         //given 
         CartItem item1= new CartItem(1L, user, product, 2);
         CartItem item2= new CartItem(2L, user, product, 3);
@@ -235,7 +235,14 @@ public class CartItemServiceTest {
         BigDecimal totalPrice = cartItemService.calculateTotalPrice(list);
         assertEquals(BigDecimal.valueOf(50), totalPrice);
     }
-    // dokończyc 
+    @Test
+    void calculateTotalPriceWhencCartItemIsNull(){
+        List<CartItem> nullCartItems= null;
+        BigDecimal totalPriceForNullCartItems= cartItemService.calculateTotalPrice(nullCartItems);
+        assertEquals(BigDecimal.ZERO, totalPriceForNullCartItems);
+
+
+    }
 
 
 
