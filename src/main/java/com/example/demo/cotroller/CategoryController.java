@@ -15,7 +15,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.exceptions.CategoryArleadyExistException;
 import com.example.demo.model.Category;
 import com.example.demo.services.CategoryService;
-import com.example.demo.services.ProductService;
+import com.example.demo.services.impl.CategoryServiceImpl;
+import com.example.demo.services.impl.ProductServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequiredArgsConstructor
 class CategoryController {
-    final CategoryService categoryService;
-    final ProductService productService;
+    final CategoryServiceImpl categoryService;
+    final ProductServiceImpl productService;
 
     @GetMapping("/categories")
     public String showAllCategories(Model model, @Param("keyword") String keyword){

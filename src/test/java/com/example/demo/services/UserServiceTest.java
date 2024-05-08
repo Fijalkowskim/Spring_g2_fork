@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -33,11 +34,12 @@ import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repositories.UserRepository;
+import com.example.demo.services.impl.UserServiceImp;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
     @InjectMocks
-    UserService userService;
+    UserServiceImp userService;
     @Mock
     UserRepository userRepository;
 
@@ -215,14 +217,79 @@ public class UserServiceTest {
         assertTrue(new BCryptPasswordEncoder().matches(newPassword, user1.getPassword()));
     }
     // to do !!!
-    // @Test
-    // void isPasswordValidWhenUserExists(){
-    //     var password= "Test1234!";
-    //     var email= "test@gmail.com";
-    //     when(userRepository.findByEmail(email)).thenReturn(Optional.of(user1));
-    //     assertTrue(new BCryptPasswordEncoder().matches(password, Optional.of(user1).get().getPassword()));
-    // }
+    @Test
+    void isPasswordValidWhenUserExistsAndPasswordIsCorrectTest(){
+        var password= "Test1234!";
+        var email= "test@gmail.com";
+        var encodedPassword = new BCryptPasswordEncoder().encode(password);
+        user1.setPassword(encodedPassword);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user1));
+        assertTrue(userService.isPasswordValid(email, password));
+    }
+    @Test
+    void isPasswordValidWhenUserExistsAndPasswordIsIncorrectTest(){
+        var password= "iNCORECTpASSWORD";
+        var encodedPassword= new BCryptPasswordEncoder().encode("Test1234!");
+        var email= "test@gmail.com";
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(encodedPassword);
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        assertFalse(userService.isPasswordValid(email, password));
+    }
+    @Test
+    void isPasswordValidWhenUserDoesNotExist(){
+        var email= "test@gmail.com";
+        var password= "Test1234!";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        assertFalse(userService.isPasswordValid(email, password));
 
+    }
+    @Test
+    void changePasswordWhenUserExists(){
+        var email= "test@gmail.com";
+        var newPassword= "Test1234!";
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword("OldPassword");
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        assertDoesNotThrow(()->{
+            userService.changePassword(email, newPassword);
+        });
+        assertNotEquals("OldPassword", user.getPassword());
+        assertTrue(new BCryptPasswordEncoder().matches(newPassword, user.getPassword()));
+        verify(userRepository).save(user);
 
-
+    }
+    @Test
+    void changepasswordWhenUserDoesNotExistTest(){
+        var email= "test@gmail.com";
+        var password= "Test1234!";
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+        assertThrows(UserCanNotBeNullException.class,()-> userService.changePassword(email, password));
+        verify(userRepository, never()).save(any());
+    }
+    @Test
+    void arePasswordTheSameWhenPasswardsAreTheSame(){
+        var password1= "Test1234!";
+        var password= "Test1234!";
+        assertTrue(userService.arePasswordTheSame(password, password1));
+    }
+    @Test
+    void arePasswordTheSameWhenPasswardsAreDifferent()
+{
+    var password1= "Test1234!";
+    var password= "Test124!";
+    assertFalse(userService.arePasswordTheSame(password, password1));
+}
+@Test
+void isNewPasswordCorrectWhenPasswordMatchesPattern(){
+    var newPassword="Test12345";
+    assertTrue(userService.isNewPasswordCorrect(newPassword));
+}
+@Test
+void isNewPasswordCorrectWhenPasswordDoesNotMatchPattern(){
+    var newPassword="Test";
+    assertFalse(userService.isNewPasswordCorrect(newPassword));
+}
 }

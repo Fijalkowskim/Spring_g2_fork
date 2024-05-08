@@ -24,6 +24,7 @@ import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.model.dto.UserSaveDto;
 import com.example.demo.services.UserService;
+import com.example.demo.services.impl.UserServiceImp;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ import lombok.var;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserRestController {
-    final UserService userService;
+    final UserServiceImp userService;
 
     @GetMapping("/whoami")
     public ResponseEntity<String> whoAmI(Authentication authentication){

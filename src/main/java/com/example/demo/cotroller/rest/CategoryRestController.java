@@ -20,6 +20,7 @@ import com.example.demo.exceptions.CategoryArleadyExistException;
 import com.example.demo.model.Category;
 import com.example.demo.model.dto.IdDto;
 import com.example.demo.services.CategoryService;
+import com.example.demo.services.impl.CategoryServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/category")
 public class CategoryRestController {
     
-    final CategoryService categoryService;
+    final CategoryServiceImpl categoryService;
 
     @GetMapping
     public List<Category> showAllCategories(){

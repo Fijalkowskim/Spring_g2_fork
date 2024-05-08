@@ -22,7 +22,7 @@ import com.example.demo.exceptions.UserCanNotBeNullException;
 import com.example.demo.mappers.UserSaveDtoToUserMapper;
 import com.example.demo.model.Role;
 import com.example.demo.model.dto.UserSaveDto;
-import com.example.demo.services.UserService;
+import com.example.demo.services.impl.UserServiceImp;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ import lombok.var;
 @Controller
 @RequiredArgsConstructor
 class UserController {
-    final UserService userService;
+    final UserServiceImp userService;
     final AuthPasswordConfig authPasswordConfig;
 
     @Secured({"ROLE_ADMIN"})

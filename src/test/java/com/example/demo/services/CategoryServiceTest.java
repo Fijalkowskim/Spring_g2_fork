@@ -26,11 +26,12 @@ import org.springframework.data.domain.PageRequest;
 import com.example.demo.exceptions.CategoryArleadyExistException;
 import com.example.demo.model.Category;
 import com.example.demo.repositories.CategoryRepository;
+import com.example.demo.services.impl.CategoryServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
     @InjectMocks
-    CategoryService categoryService;
+    CategoryServiceImpl categoryService;
     @Mock
     CategoryRepository categoryRepository;
     private Category category;

@@ -25,6 +25,7 @@ import com.example.demo.model.Product;
 import com.example.demo.model.dto.ErrorDto;
 import com.example.demo.model.dto.IdDto;
 import com.example.demo.services.ProductService;
+import com.example.demo.services.impl.ProductServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/product")
 public class ProductRestController {
-    final ProductService productService;
+    final ProductServiceImpl productService;
 
     @GetMapping
     public List<Product> getAllProducts(){

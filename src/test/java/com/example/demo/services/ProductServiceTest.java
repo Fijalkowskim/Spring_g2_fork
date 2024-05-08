@@ -18,12 +18,13 @@ import com.example.demo.exceptions.ProductIdMustBeGreaterThanZeroExeption;
 import com.example.demo.model.Product;
 import com.example.demo.repositories.CategoryRepository;
 import com.example.demo.repositories.ProductRepository;
+import com.example.demo.services.impl.ProductServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
     
     @InjectMocks
-    ProductService productService;
+    ProductServiceImpl productService;
     
     @Mock
      ProductRepository productRepository;

@@ -14,50 +14,13 @@ import com.example.demo.repositories.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@RequiredArgsConstructor
-public class CategoryService {
 
-    final CategoryRepository categoryRepository;
-    public List<Category> getAllCategories(){
-        return categoryRepository.findAll();
-    }
-
-    public Page<Category> showAllCategories(String keyword,int pageNumber) {
-         Pageable page= PageRequest.of(pageNumber-1,10);
-        if (keyword != null) {
-            return categoryRepository.findAll(keyword,page);
-        } else {
-            return categoryRepository.findAll(page);
-        }
-
-    }
-
-    public Optional<Category> findByCategoryId(Long id) {
-        return categoryRepository.findById(id);
-    }
-
-    public boolean existCategoryByCategoryName(Category category) {
-        return categoryRepository.existsByName(category.getName());
-    }
-
-    public void insertCategory(Category category) throws CategoryArleadyExistException {
-        var categoryExist = existCategoryByCategoryName(category);
-        if (!categoryExist) {
-            category.setId(null);
-            categoryRepository.save(category);
-        } else {
-            throw new CategoryArleadyExistException();
-        }
-    }
-
-    public void removeCategoryById(Long id) {
-        categoryRepository.deleteById(id);
-    }
-
-    public void updateCurrentCategory(Category category, Long id) {
-        category.setId(id);
-        categoryRepository.save(category);
-    }
-
-}
+public interface CategoryService {
+     List<Category> getAllCategories();
+     Page<Category> showAllCategories(String keyword,int pageNumber);
+     Optional<Category> findByCategoryId(Long id);
+     boolean existCategoryByCategoryName(Category category);
+     void insertCategory(Category category) throws CategoryArleadyExistException;
+     void removeCategoryById(Long id);
+     void updateCurrentCategory(Category category, Long id);
+} 

@@ -17,15 +17,16 @@ import com.example.demo.exceptions.ProductArleadyExistsException;
 import com.example.demo.exceptions.ProductIdMustBeGreaterThanZeroExeption;
 import com.example.demo.model.Product;
 import com.example.demo.services.ProductService;
+import com.example.demo.services.impl.ProductServiceImpl;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-class ProductController {
-    final ProductService productService;
-
+public class ProductController {
+    final ProductServiceImpl productService;
+  
 
     @GetMapping("/product")
     public String showAllProducts(Model model, @Param("keyword") String keyword){
@@ -57,8 +58,13 @@ class ProductController {
 @Secured({"ROLE_MANAGER","ROLE_ADMIN"})
     @GetMapping("/removeProduct/{productId}")
     public String removeProduct(@PathVariable Long productId) throws ProductIdMustBeGreaterThanZeroExeption {
-        productService.removeProduct(productId);
-        return "redirect:/product";
+        if(productId<0){
+            throw new ProductIdMustBeGreaterThanZeroExeption();
+        }else{
+            productService.removeProduct(productId);
+            return "redirect:/product";
+        }
+     
     }
 
     // todo:
@@ -135,7 +141,7 @@ class ProductController {
 
     }
 
-    private String bindProductToModel(Long productId, Model model) {
+    public String bindProductToModel(Long productId, Model model) {
         var optionalProduct = productService.findProductById(productId);
         if (optionalProduct.isEmpty()) {
             model.addAttribute("error", "Product doesn't exist");

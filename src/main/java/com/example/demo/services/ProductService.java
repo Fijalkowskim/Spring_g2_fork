@@ -17,67 +17,15 @@ import com.example.demo.repositories.ProductRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
-@RequiredArgsConstructor
-public class ProductService {
-    final ProductRepository productRepository;
-    final CategoryRepository categoryRepository;
 
-    public List<Product> getAllProducts(){
-        return productRepository.findAll();
-    }
-
-    public Page<Product> findAllProducts(String keyword,int pageNumber) {
-        Pageable page= PageRequest.of(pageNumber-1,5);
-        if (keyword != null) {
-            return productRepository.findAll(keyword,page);
-        } else {
-            return productRepository.findAll(page);
-        }
-
-    }
-
-    public void removeProduct(Long id) throws ProductIdMustBeGreaterThanZeroExeption {
-        if(id>0){
-            productRepository.deleteById(id);
-        }else{
-            throw new ProductIdMustBeGreaterThanZeroExeption();
-        }
-      
-    }
-
-    public Optional<Product> findProductById(Long id) {
-        return productRepository.findById(id);
-
-    }
-
-    public boolean existProductByName(Product product) {
-        return productRepository.existsByName(product.getName());
-    }
-
-    public void insertProduct(Product product) throws ProductArleadyExistsException {
-        var productExist = existProductByName(product);
-        if (productExist) {
-            throw new ProductArleadyExistsException();
-        } else {
-            product.setId(null);
-            productRepository.save(product);
-        }
-
-    }
-
-    public void updateCurrentProduct(Product product, Long id) {
-        product.setId(id);
-        productRepository.save(product);
-
-    }
-
-    public List<Category> findAllCategories() {
-        return categoryRepository.findAll();
-    }
-
-    public List<Product> findProductByCategoryId(Long categoryId) {
-        return productRepository.findAllByCategoryId(categoryId);
-    }
-
+public interface ProductService {
+    List<Product> getAllProducts();
+    Page<Product> findAllProducts(String keyword,int pageNumber);
+    void removeProduct(Long id) throws ProductIdMustBeGreaterThanZeroExeption;
+    Optional<Product> findProductById(Long id);
+    boolean existProductByName(Product product);
+    void insertProduct(Product product) throws ProductArleadyExistsException;
+    void updateCurrentProduct(Product product, Long id);
+    List<Category> findAllCategories();
+    List<Product> findProductByCategoryId(Long categoryId);
 }
