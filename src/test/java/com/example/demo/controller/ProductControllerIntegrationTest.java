@@ -40,7 +40,7 @@ import com.example.demo.model.Category;
 import com.example.demo.model.Product;
 import com.example.demo.services.ProductService;
 
-import lombok.var;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ProductControllerIntegrationTest {

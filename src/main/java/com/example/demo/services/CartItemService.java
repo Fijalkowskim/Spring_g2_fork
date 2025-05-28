@@ -1,23 +1,15 @@
 package com.example.demo.services;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
-import com.example.demo.exceptions.CartItemCanNotBeNull;
-import com.example.demo.exceptions.MaxValueException;
-import com.example.demo.exceptions.ProductCanNotBeNullException;
-import com.example.demo.exceptions.ProductNotFoundExeption;
-import com.example.demo.exceptions.QuantityMinException;
+import com.example.demo.exceptions.*;
 import com.example.demo.model.CartItem;
 import com.example.demo.model.User;
 import com.example.demo.repositories.CartItemRepositiry;
 import com.example.demo.repositories.ProductRepository;
-
 import lombok.RequiredArgsConstructor;
-import lombok.var;
+import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class CartItemService {

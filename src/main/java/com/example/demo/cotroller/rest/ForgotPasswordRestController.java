@@ -25,7 +25,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.var;
+//
 
 @RestController
 @RequestMapping("/api/forgot-password")

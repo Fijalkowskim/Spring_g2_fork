@@ -26,7 +26,6 @@ import com.example.demo.services.impl.UserServiceImp;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.var;
 
 @Controller
 @RequiredArgsConstructor
